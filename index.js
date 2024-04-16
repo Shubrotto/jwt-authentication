@@ -22,14 +22,14 @@ router.post("/login", async (ctx) => {
   };
 
   if (!user.aud && !user.userId) {
-    ctx.status = 404;
-    ctx.body = { message: "Aud & userId is not valid" };
+    ctx.status = 401;
+    ctx.body = { error: "Aud & userId is not valid" };
   } else if (!user.aud) {
-    ctx.status = 404;
-    ctx.body = { message: "Aud  is not valid" };
+    ctx.status = 401;
+    ctx.body = { error: "Aud  is not valid" };
   } else if (!user.userId) {
-    ctx.status = 404;
-    ctx.body = { message: "userId  is not valid" };
+    ctx.status = 401;
+    ctx.body = { error: "userId  is not valid" };
   }
 
   const token = jwt.sign({ userId: user.userId, aud: user.aud }, secret_Key, {
@@ -38,8 +38,11 @@ router.post("/login", async (ctx) => {
   ctx.body = { token: token };
 });
 
-router.get("/user", verifyToken, async (ctx, next) => {
-  ctx.body = "You are authorised! ";
+router.get("/user", verifyToken, async (ctx) => {
+  ctx.body = {
+    aud: ctx.state.aud,
+    userId: ctx.state.userId,
+  };
 });
 
 app.use(router.routes());

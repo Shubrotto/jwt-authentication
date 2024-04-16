@@ -15,7 +15,8 @@ const verifyToken = (ctx, next) => {
     }
     ctx.state.user = decode;
   } catch (error) {
-    ctx.error = "Authentication failed";
+    ctx.throw = "Authentication failed";
+    console.log(error);
   }
   return next();
 };
