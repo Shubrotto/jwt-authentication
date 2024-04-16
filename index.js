@@ -39,10 +39,7 @@ router.post("/login", async (ctx) => {
 });
 
 router.get("/user", verifyToken, async (ctx) => {
-  ctx.body = {
-    aud: ctx.state.aud,
-    userId: ctx.state.userId,
-  };
+  ctx.body = "User is Authorized";
 });
 
 app.use(router.routes());
